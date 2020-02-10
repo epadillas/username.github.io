@@ -20,13 +20,13 @@ While looking for Bitbucket alternatives, I came across the Apache Allura projec
 
 > an open source implementation of a software forge, a web site that manages source code repositories, bug reports, discussions, wiki pages, blogs, and more for any number of individual projects.
 
-Getting Allura up and running was easy since the project is <a href="https://forge-allura.apache.org/docs/getting_started/installation.html" target="_blank">very well documented</a>. This allowed me to quickly try things with their code. Running ZAP against my local instance took no time, and ZAP reported that it was able to split HTTP responses by using `%0D%0A` in the HTTP GET parameter `return_to`, in the authentication redirection URL `/auth/?return_to=/`. Tipically, this "return to" functionality is useful to redirect unauthenhticated users to certain resource once they unauthenticate. So when attempting to access a protected resource without a valid session, Allura will:
+Getting Allura up and running was easy since the project is <a href="https://forge-allura.apache.org/docs/getting_started/installation.html" target="_blank">very well documented</a>. This allowed me to quickly try things with their code. Running ZAP against my local instance took no time, and it reported that it was able to split HTTP responses by using `%0D%0A` in the HTTP GET parameter `return_to`, in the authentication redirection URL `/auth/?return_to=/`. Typically, this "return to" functionality is used to redirect unauthenticated users to a particular resource once they authenticate. So when attempting to access a protected resource without a valid session, Allura will:
 
 1. Realize that the user is not authenticated
 2. Take the user to the login page while using the `return_to` parameter to
    remember what URL was requested first
 3. If the user authenticates successfully, Allura redirects the browser to
-   whatever `return_to` pointed to, by using an HTTP `Location` header
+   whatever `return_to` pointed to, by using the `Location` header
 
 <br>
 <hr>
@@ -34,25 +34,25 @@ Getting Allura up and running was easy since the project is <a href="https://for
 ## Exploiting
 To get an arbitrary header back from Allura 1.8.0 you must:
 1. Create a crafted URL such as `/auth/?return_to=/%0D%0AFoo:%20Bar`
-2. Visit the URL
+2. Visit such URL
 3. Successfully log in
 <br>
 
-When dealing with HTTP response splitting, an "easy win" when argumenting why this should be addressed is that attackers could redirect victims to a phishing website by using the ``Location`` HTTP header. In this case, the crafed URL would look like so:
+When dealing with HTTP response splitting, an easy way to argument why this should be addressed is the fact that attackers could redirect victims to a phishing website by using the ``Location`` header. In this hypothetical case, the crafted URL would look like this:
 <br>
 
 `/auth/?return_to=/%0D%0ALocation:%20https://example.com`
 <br>
 
-However, the normal functionality of Allura 1.8.0 is to already construct a legitimate `Location` header, so injecting a new one will result in the HTTP response having two of them, and modern web browser will refuse to process such responses.
+However, the normal functionality of Allura 1.8.0 is to already construct a legitimate `Location` header, so injecting a new one will result in the HTTP response having two of them, and modern web browsers will refuse to process such responses.
 <br>
 
-Another attack vector, which led to the creation of <a target="_blank" href="https://nvd.nist.gov/vuln/detail/CVE-2018-1319">CVE-2018-1319</a>, is to find vulnerabilities in code that handles data coming from the HTTP headers, such as cookie-handling code. To set an arbitrary cookie, the URL would look like this:
+Another attack vector, which led to the creation of <a target="_blank" href="https://nvd.nist.gov/vuln/detail/CVE-2018-1319">CVE-2018-1319</a>, is to find vulnerabilities in the code that handles data coming from the HTTP headers, such as cookie-handling code. To set an arbitrary cookie, the URL would look like this:
 
 `/auth/?return_to=/%0D%0ASet-Cookie:%20Foo%3DBar`
 <br>
 
-Allura uses the <a href="https://pypi.org/project/WebFlash/#history">WebFlash</a> component to display feedback messages whenever certain actions are performed by a logged-in user (e.g. in the pages under `/auth/user_info/contacts/`). These messages are communicated to the front-end via the `webflash` cookie. For example, editing your profile will set the following cookie:
+Allura uses the <a href="https://pypi.org/project/WebFlash/#history">WebFlash</a> component to display feedback messages whenever certain actions are performed by an authenticated user (e.g. in the pages under `/auth/user_info/contacts/`). These messages are communicated to the front-end via the `webflash` cookie. For example, editing your profile will set the following cookie:
 
 {% highlight bash %}
 webflash=%7B
@@ -84,12 +84,12 @@ And shows the following flash message in the front-end:
 <img width="66%" height="66%" src="/assets/posts/2020/02/10/webflash.png" />
 </center>
 
-This means that whatever is in the `webflash` cookie will be picked up by the code generating these messages. To trigger XSS here, the  paylaod for the cookie would look like this:
+This means that whatever is in the `webflash` cookie will be picked up by the code generating these messages. To trigger XSS here, the paylaod for the cookie would look like this:
 {% highlight bash %}
 {"status":"a'})</script><script>alert(document.cookie)//","message":"xss"}
 {% endhighlight %}
 
-Note how the `status` attribute contains the JavaScript payload up to `//`. This will make the computed HTML page looke like this:
+Notice how the `status` attribute contains the JavaScript payload up to `//`. This will make the computed HTML page looke like this:
 {% highlight html %}
 <script type="text/javascript">
   $('#messages').notify('xss', {
