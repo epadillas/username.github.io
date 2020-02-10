@@ -617,7 +617,7 @@ blockquote {
 
 /* Name.Namespace */
 .highlight .nt {
-  color: #000080; }
+  color: #04cddb; }
 
 /* Name.Tag */
 .highlight .nv {
@@ -717,7 +717,7 @@ blockquote {
   font-weight: 400;
   border: 1px solid #6F6F6F;
   border-radius: 3px;
-  padding: 0.1rem 0.5rem; }
+  padding: 0.1rem 0.5rem;}
 
 .header {
   display: flex;
@@ -922,3 +922,11 @@ blockquote {
 
   .contact-list li a {
     font-size: 0.7rem; } }
+
+pre {
+    font-size: 16px;
+}
+
+.highlighter-rouge {
+    font-size: 16px;
+}

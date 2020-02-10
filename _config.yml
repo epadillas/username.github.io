@@ -1,29 +1,23 @@
-title: Wendell Thomas
-description: > # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
-baseurl: "/monday" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+title: Everardo Padilla
+description: I'm Everardo Padilla, a cybersecurity consultant that likes to create and break things. This is my personal blog where I write about stuff that interests me.
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "http://localhost:4000" # the base hostname & protocol for your site, e.g. http://example.com
 permalink: ':title/'
-blog_theme: dark # Or use dark
+blog_theme: dark
 
 # Profile information
-name: Wendell Thomas
-tagline: Full Stack Developer
-about-description: # Add Discription
-pic: 79.jpg  # Place a 200x200 picture inside /assets/img/ folder and provide the name of the file below
+name: Everardo Padilla
+tagline: Cybersecurity Consultant
+about-description: I'm Everardo Padilla, a cybersecurity consultant that likes to create and break things. This is my personal blog where I write about stuff that interests me.
+# pic: pic.jpg
 
 # Contact links
-email: artemsheludko@tuta.io # Add your Email address
-phone: 044 825 5523 # Add your Phone number
-website: artemsheludko.pw # Add your website, do not add http://
-linkedin: # Add your Linkedin handle
-github: artemsheludko # Add your Github handle
-twitter: '@artemsheludko_' # Add your Twitter handle
+website: epadillas.github.io
+github: epadillas
+# linkedin:
 
 # Tracker
-analytics:
+analytics: UA-113019047-1
 
 # Comments
 discus-identifier: # Add your Disqus identifier
@@ -35,6 +29,7 @@ assets:
     - assets/img
     - assets/js
     - assets/stylesheets
+    - _posts/assets
 
 # Build settings
 exclude:

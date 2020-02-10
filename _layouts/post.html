@@ -9,7 +9,7 @@ layout: default
 </div>
 <div class="post-container">
   {% if page.img %}
-   <img class="post-img" src={{ "/assets/img/" | prepend: site.baseurl | append : page.img}} alt="{{page.title}}">
+   <img class="post-img" src={{ "" | prepend: site.baseurl | append : page.img}} alt="{{page.imgcredit}}">
   {% endif %}
   <div class="post-content">
     <article>
