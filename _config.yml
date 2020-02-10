@@ -1,7 +1,7 @@
 title: Everardo Padilla
 description: I'm Everardo Padilla, a cybersecurity consultant that likes to create and break things. This is my personal blog where I write about stuff that interests me.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://localhost:4000" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://epadillas.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 permalink: ':title/'
 blog_theme: dark
 
